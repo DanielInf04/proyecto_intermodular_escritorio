@@ -1,20 +1,22 @@
-// 1.
-const { app, BrowserWindow } = require('electron');
+// Dependencies
+require('dotenv').config()
+const { app, BrowserWindow, ipcMain } = require('electron');
+const { createLoginWindow } = require('./src/main/windows')
+const registerIpc = require('./src/main/ipc/index');
 
-// 2.
-let window;
+// Windows for app
+let loginWindow
+let panelWindow
 
-// 3.
-app.on('ready', () => {
-  // 4.
-  window = new BrowserWindow({
-    resizable : false,
-    width: 1360 ,
-    height: 890,
-    webPreferences: { 
-     contextIsolation: false,
-     nodeIntegration: true
+// When app is ready
+app.whenReady().then(() => {
+  registerIpc(ipcMain);
+
+  loginWindow = createLoginWindow()
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      loginWindow = createLoginWindow()
     }
-  });
-  window.loadFile('index.html');
-});
+  })
+})

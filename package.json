@@ -1,5 +1,5 @@
 {
-  "name": "plantilla",
+  "name": "Administración",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -20,6 +20,10 @@
     "electron-builder": "^26.0.12"
   },
   "dependencies": {
-    "moment": "^2.30.1"
+    "dotenv": "^17.2.3",
+    "form-data": "^4.0.5",
+    "moment": "^2.30.1",
+    "node-fetch": "^3.3.2",
+    "sweetalert2": "^11.26.18"
   }
 }
