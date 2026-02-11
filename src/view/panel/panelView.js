@@ -1,4 +1,5 @@
 import { wireSidebarTabs } from './tabSync.js';
+import { wireSidebarViews } from './tabSync.js';
 
 export class PanelView {
 
@@ -6,6 +7,7 @@ export class PanelView {
 
   init() {
     wireSidebarTabs();
+    wireSidebarViews();
   }
 
   renderCategoriesTable(categories) {
