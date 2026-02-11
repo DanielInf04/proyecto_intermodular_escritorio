@@ -17,6 +17,14 @@ const productsService = {
         }
     },
     getById: (id) => request(`/api/products/${id}`),
+    /*create: ({ nombre, marca, precio, stock, descripcion, subCategoriaId }) =>
+        request("/api/products", {
+            method: "POST",
+            body: {
+                nombre: String(nombre),
+                marca: String(marca)
+            }
+        })*/
 }
 
 module.exports = { productsService }

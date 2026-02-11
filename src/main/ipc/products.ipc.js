@@ -12,4 +12,9 @@ module.exports = (ipcMain) => {
         return await productsService.getById(id);
     });
 
+    // Crea un producto
+    ipcMain.handle('products:create', async(_event, data) => {
+        return await subcategoriesService.create(data);
+    })
+
 }
