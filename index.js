@@ -4,7 +4,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { createLoginWindow } = require('./src/main/windows')
 const registerIpc = require('./src/main/ipc/index');
 
-// Windows for app
+// Windows for app -> PRUEBA
 let loginWindow
 let panelWindow
 
