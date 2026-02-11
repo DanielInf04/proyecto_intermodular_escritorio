@@ -9,6 +9,12 @@ contextBridge.exposeInMainWorld('api', {
     openPanel: () => ipcRenderer.invoke('ui:openPanel'),
   },
 
+  // Usuarios
+
+  users: {
+
+  },
+
   // Productos
 
   products: {

@@ -4,4 +4,6 @@ module.exports = (ipcMain) => {
     require('./products.ipc')(ipcMain)
     require('./categories.ipc')(ipcMain)
     require('./subcategories.ipc')(ipcMain)
+    require('./users.ipc')(ipcMain)
+
 }
