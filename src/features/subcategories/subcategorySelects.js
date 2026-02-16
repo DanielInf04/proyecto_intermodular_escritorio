@@ -34,3 +34,30 @@ export function renderCategorySelectOptions(categories, selectedId = null) {
 
   if (selectedId != null && editSelect) editSelect.value = String(selectedId);
 }
+
+export function renderSubcategoryFilterOptions(categories, selectedId = null) {
+  const filterSelect = $("#subcat-category-filter");
+  if (!filterSelect) return;
+
+  // Limpiar select
+  filterSelect.innerHTML = "";
+
+  // Placeholder
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Filtrar por categoría";
+  filterSelect.appendChild(placeholder);
+
+  // Opciones dinámicas
+  for (const cat of categories) {
+    const opt = document.createElement("option");
+    opt.value = cat.getId();
+    opt.textContent = cat.getName();
+    filterSelect.appendChild(opt);
+  }
+
+  // Seleccionar si viene uno predefinido
+  if (selectedId != null) {
+    filterSelect.value = String(selectedId);
+  }
+}

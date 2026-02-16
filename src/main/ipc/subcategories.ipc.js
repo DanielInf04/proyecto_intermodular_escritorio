@@ -7,6 +7,11 @@ module.exports = (ipcMain) => {
         return await subcategoriesService.list(params); // params: {page,size}
     });
 
+    // Retorna una lista de subcategorieas de una categoria
+    ipcMain.handle('subcategories:getByCategory', async(_e, id) => {
+        return await subcategoriesService.getByCategory(id);
+    })
+
     // Obtiene una subcategoria
     ipcMain.handle('subcategories:getById', async(_e, id) => {
         return await subcategoriesService.getById(id);

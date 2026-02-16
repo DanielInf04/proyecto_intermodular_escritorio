@@ -107,24 +107,19 @@
             <div class="filters">
               <div class="left">
                 <input class="form-control" id="products-search" style="min-width:260px" type="search" placeholder="Buscar producto (nombre, marca...)" />
-                <select class="form-select" style="min-width:190px">
-                  <option selected>Filtrar por categoría</option>
-                  <option>Electrónica</option>
-                  <option>Hogar</option>
-                  <option>Moda</option>
+                <select class="form-select" id="products-category-filter" style="min-width:190px">
+                  <option value="" selected>Filtrar por categoría</option>
                 </select>
-                <select class="form-select" style="min-width:210px">
-                  <option selected>Filtrar por subcategoría</option>
-                  <option>Móviles</option>
-                  <option>Portátiles</option>
-                  <option>Accesorios</option>
+
+                <select class="form-select" id="products-subcategory-filter" style="min-width:210px" disabled>
+                  <option value="" selected>Filtrar por subcategoría</option>
                 </select>
-                <span class="divider-y d-none d-md-block"></span>
-                <select class="form-select" style="min-width:140px">
-                  <option selected>Stock</option>
-                  <option>Con stock</option>
-                  <option>Sin stock</option>
-                  <option>Bajo stock</option>
+
+                <select class="form-select" id="products-stock-filter" style="min-width:140px">
+                  <option value="" selected>Stock</option>
+                  <option value="in">Con stock</option>
+                  <option value="out">Sin stock</option>
+                  <option value="low">Bajo stock</option>
                 </select>
               </div>
 
@@ -278,11 +273,8 @@
             <div class="filters">
               <div class="left">
                 <input id="subcat-search" class="form-control" style="min-width:260px" type="search" placeholder="Buscar subcategoría..." />
-                <select class="form-select" style="min-width:220px">
-                  <option selected>Filtrar por categoría</option>
-                  <option>Electrónica</option>
-                  <option>Hogar</option>
-                  <option>Moda</option>
+                <select class="form-select" id="subcat-category-filter" style="min-width:220px">
+                  <option value="" selected>Filtrar por categoría</option>
                 </select>
               </div>
               <div class="right">
@@ -427,83 +419,110 @@
       </div>
 
       <div class="modal-body">
-        <div class="row g-3">
+  <div class="container-fluid">
 
-          <!-- Nombre -->
-          <div class="col-md-8">
-            <label class="form-label">Nombre</label>
-            <input class="form-control" type="text" name="nombre" placeholder="Nombre del producto" required>
-          </div>
+    <!-- Nombre -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <label class="form-label">Nombre</label>
+        <input class="form-control" type="text" name="nombre"
+               placeholder="Nombre del producto" required>
+      </div>
+    </div>
 
-          <!-- Marca -->
-          <div class="col-md-4">
-            <label class="form-label">Marca</label>
-            <input class="form-control" type="text" name="marca" placeholder="Marca" required>
-          </div>
-
-          <!-- Precio -->
-          <div class="col-md-4">
-            <label class="form-label">Precio</label>
-            <input class="form-control" type="number" step="0.01" name="precio" placeholder="0.00" required>
-          </div>
-
-          <!-- Stock -->
-          <div class="col-md-4">
-            <label class="form-label">Stock</label>
-            <input class="form-control" type="number" name="stock" placeholder="0" min="0" required>
-          </div>
-
-          <!-- Subcategoría -->
-          <div class="col-md-4">
-            <label class="form-label d-block">Subcategoría</label>
-            <select class="form-select w-100" name="subcategoria_id" required>
-              <option value="" selected disabled>Selecciona…</option>
-              <!-- rellenar por JS -->
-            </select>
-          </div>
-
-          <!-- Descripción -->
-          <div class="col-12">
-            <label class="form-label">Descripción</label>
-            <textarea class="form-control" rows="3" name="descripcion" placeholder="Descripción del producto..."></textarea>
-          </div>
-
-          <!-- Imagen (archivo) -->
-          <div class="col-12">
-            <label class="form-label">Imagen</label>
-
-            <input
-              type="file"
-              id="productImageInputCreate"
-              name="imagen"
-              accept="image/*"
-              class="d-none"
-            >
-
-            <div class="d-flex align-items-center gap-3">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                onclick="document.getElementById('productImageInputCreate').click()"
-              >
-                Seleccionar imagen
-              </button>
-
-              <span id="productImageNameCreate" style="margin-left:10px">Ninguna imagen seleccionada</span>
-            </div>
-          </div>
-
-        </div>
+    <!-- Marca | Categoría | Subcategoría -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">Marca</label>
+        <input class="form-control" type="text" name="marca"
+               placeholder="Marca" required>
       </div>
 
+      <div class="col-md-4">
+        <label class="form-label">Categoría</label>
+        <select class="form-select" name="categoria_id" id="productCategoryCreate" required>
+          <option value="" selected disabled>Selecciona…</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Subcategoría</label>
+        <select class="form-select" name="subcategoria_id" id="productSubcategoryCreate" required>
+          <option value="" selected disabled>Selecciona…</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Precio | Stock -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Precio</label>
+        <input class="form-control" type="number" step="0.01"
+               name="precio" placeholder="0.00" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Stock</label>
+        <input class="form-control" type="number"
+               name="stock" placeholder="0" min="0" required>
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" rows="3"
+                  name="descripcion"
+                  placeholder="Descripción del producto..."></textarea>
+      </div>
+    </div>
+
+    <!-- Imagen -->
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Imagen</label>
+
+        <input
+          type="file"
+          id="productImageInputCreate"
+          name="imagen"
+          accept="image/*"
+          class="d-none"
+        >
+
+        <div class="d-flex align-items-center gap-3">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            onclick="document.getElementById('productImageInputCreate').click()"
+          >
+            Seleccionar imagen
+          </button>
+
+          <span id="productImageNameCreate" class="text-muted">
+            Ninguna imagen seleccionada
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
       <div class="modal-footer">
-        <button class="btn btn-soft" type="button" data-bs-dismiss="modal">Cancelar</button>
-        <button class="btn btn-brand" type="submit">Crear</button>
+        <button class="btn btn-soft" type="button" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button class="btn btn-brand" type="submit">
+          Crear
+        </button>
       </div>
 
     </form>
   </div>
 </div>
+
 
 <!-- =========================
      MODAL: EDITAR PRODUCTO
@@ -535,6 +554,32 @@
             <input class="form-control" type="text" name="marca" required>
           </div>
 
+          <!-- ✅ Categoría (FALTABA) -->
+          <div class="col-md-4">
+            <label class="form-label">Categoría</label>
+            <select
+              class="form-select"
+              name="categoria_id"
+              id="productCategoryEdit"
+              required
+            >
+              <option value="" selected disabled>Selecciona…</option>
+            </select>
+          </div>
+
+          <!-- ✅ Subcategoría (ya lo tenías, se queda) -->
+          <div class="col-md-4">
+            <label class="form-label d-block">Subcategoría</label>
+            <select
+              class="form-select w-100"
+              id="productSubcategoryEdit"
+              name="subcategoria_id"
+              required
+            >
+              <option value="" selected disabled>Selecciona…</option>
+            </select>
+          </div>
+
           <!-- Precio -->
           <div class="col-md-4">
             <label class="form-label">Precio</label>
@@ -545,15 +590,6 @@
           <div class="col-md-4">
             <label class="form-label">Stock</label>
             <input class="form-control" type="number" name="stock" min="0" required>
-          </div>
-
-          <!-- Subcategoría -->
-          <div class="col-md-4">
-            <label class="form-label d-block">Subcategoría</label>
-            <select class="form-select w-100" name="subcategoria_id" required>
-              <option value="" disabled>Selecciona…</option>
-              <!-- rellenar por JS -->
-            </select>
           </div>
 
           <!-- Descripción -->
@@ -602,6 +638,7 @@
     </form>
   </div>
 </div>
+
   <!-- =========================
        MODAL: CATEGORÍA
   ========================== -->

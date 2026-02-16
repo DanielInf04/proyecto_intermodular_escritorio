@@ -310,3 +310,27 @@ body{
     border-top: 1px solid var(--border);
 }
 .btn-close{ filter: invert(1); opacity: .8; }
+
+/* --- Fix layout forms (modales) --- */
+.modal .form-label{
+  display: block;
+  margin-bottom: .35rem;
+}
+
+.modal .form-select,
+.modal .form-control{
+    width: 100%;
+    border-radius: 12px;
+    padding: .5rem .75rem;
+}
+
+/* Si algún select queda muy bajito en dark mode */
+.modal .form-select{
+  background-color: rgba(0,0,0,.18);
+}
+
+/* Textarea fija en modales */
+.modal textarea.form-control {
+  height: 120px;       /* ajusta a tu gusto */
+  resize: none;        /* evita que el usuario la estire */
+}

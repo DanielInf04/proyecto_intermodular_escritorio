@@ -14,7 +14,21 @@ module.exports = (ipcMain) => {
 
     // Crea un producto
     ipcMain.handle('products:create', async(_event, data) => {
-        return await subcategoriesService.create(data);
+        return await productsService.create(data);
+    })
+
+    ipcMain.handle("products:uploadImage", async (e, payload) => {
+        return productsService.uploadImage(payload);
+    });
+
+    // Actualiza un producto
+    ipcMain.handle("products:update", async (_event, id, data) => {
+        return productsService.update(id, data)
+    })
+
+    // Eliminar un producto
+    ipcMain.handle('products:delete', async (_event, id) => {
+        return await productsService.remove(id)
     })
 
 }

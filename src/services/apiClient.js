@@ -19,6 +19,11 @@ async function request(path, { method = "GET", body, headers = {} } = {}) {
     ...headers,
   };
 
+  if (method === "POST" && path.startsWith("/api/categories")) {
+    console.log("[apiClient] POST categories token?", !!token);
+    console.log("[apiClient] headers:", finalHeaders);
+  }
+
   // ✅ Solo JSON si NO es multipart
   if (!multipart && body && !finalHeaders["Content-Type"]) {
     finalHeaders["Content-Type"] = "application/json";

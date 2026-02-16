@@ -19,7 +19,11 @@ contextBridge.exposeInMainWorld('api', {
 
   products: {
     list: (params) => ipcRenderer.invoke('products:list', params),
-    getById: (id) => ipcRenderer.invoke('products:getById', id)
+    getById: (id) => ipcRenderer.invoke('products:getById', id),
+    create: (data) => ipcRenderer.invoke('products:create', data),
+    uploadImage: (payload) => ipcRenderer.invoke('products:uploadImage', payload),
+    update: (id, data) => ipcRenderer.invoke('products:update', id, data),
+    remove: (id) => ipcRenderer.invoke('products:delete', id),
   },
 
   // Categorias
@@ -36,6 +40,7 @@ contextBridge.exposeInMainWorld('api', {
 
   subcategories: {
     list: (params) => ipcRenderer.invoke('subcategories:list', params),
+    getByCategory: (categoryId) => ipcRenderer.invoke('subcategories:getByCategory', categoryId),
     getById: (id) => ipcRenderer.invoke('subcategories:getById', id),
     create: (data) => ipcRenderer.invoke('subcategories:create', data),
     update: (id, data) => ipcRenderer.invoke('subcategories:update', id, data),

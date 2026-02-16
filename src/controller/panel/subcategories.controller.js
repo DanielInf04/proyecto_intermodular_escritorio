@@ -4,7 +4,7 @@ import { Alerts } from "../../ui/alerts.ui.js";
 import { Modals } from "../../ui/modals.ui.js";
 import { $, debounce, scrollToSubcatTop } from "../../utils/dom.js";
 import { bindSubcategoryForms, bindSubcategoryImageInputs  } from "../../features/subcategories/subcategoryForm.js";
-import { renderCategorySelectOptions } from "../../features/subcategories/subcategorySelects.js";
+import { renderCategorySelectOptions, renderSubcategoryFilterOptions } from "../../features/subcategories/subcategorySelects.js";
 
 export class SubCategoriesController {
 
@@ -17,6 +17,7 @@ export class SubCategoriesController {
 
   async init() {
     await this.loadCategories();
+    renderSubcategoryFilterOptions(this.categories);
     renderCategorySelectOptions(this.categories);
 
     await this.refresh();
@@ -35,8 +36,10 @@ export class SubCategoriesController {
 
     categoryStore.subscribe((cats) => {
       this.categories = cats;
+      renderSubcategoryFilterOptions(this.categories);
       renderCategorySelectOptions(this.categories);
     });
+
   }
 
   async loadCategories() {

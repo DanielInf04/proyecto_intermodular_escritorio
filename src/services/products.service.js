@@ -17,14 +17,48 @@ const productsService = {
         }
     },
     getById: (id) => request(`/api/products/${id}`),
-    /*create: ({ nombre, marca, precio, stock, descripcion, subCategoriaId }) =>
+    create: ({ nombre, marca, precio, stock, descripcion, subcategoriaId }) =>
         request("/api/products", {
             method: "POST",
             body: {
-                nombre: String(nombre),
-                marca: String(marca)
-            }
-        })*/
+                nombre: String(nombre).trim(),
+                marca: String(marca).trim(),
+                precio: Number(precio),
+                stock: Number(stock),
+                descripcion: String(descripcion || "").trim(),
+                subcategoriaId: Number(subcategoriaId),
+            },
+        }),
+    
+    update: (id, { nombre, marca, precio, stock, descripcion = "", subcategoriaId }) =>
+        request(`/api/products/${id}`, {
+        method: "PUT",
+        body: {
+            nombre: String(nombre).trim(),
+            marca: String(marca).trim(),
+            precio: Number(precio),
+            stock: Number(stock),
+            descripcion: String(descripcion || "").trim(),
+            subcategoriaId: Number(subcategoriaId),
+        },
+    }),
+
+    uploadImage: ({ id, file }) => {
+        const form = new FormData();
+
+        const uint8 = Uint8Array.from(file.bytes);
+        const blob = new Blob([uint8], { type: file.type || "image/png" });
+
+        // "file" debe coincidir con lo que espera tu Spring Controller (@RequestParam("file"))
+        form.append("file", blob, file.name || "upload.png");
+
+        return request(`/api/products/${id}/image`, {
+        method: "PUT",
+        body: form,
+        });
+    },
+
+    remove: (id) => request(`/api/products/${id}`, { method: 'DELETE' })
 }
 
 module.exports = { productsService }
