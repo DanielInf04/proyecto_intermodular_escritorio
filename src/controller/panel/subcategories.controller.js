@@ -18,6 +18,7 @@ export class SubCategoriesController {
   async init() {
     await this.loadCategories();
     renderSubcategoryFilterOptions(this.categories);
+    this.bindCategoryFilter();
     renderCategorySelectOptions(this.categories);
 
     await this.refresh();
@@ -49,7 +50,7 @@ export class SubCategoriesController {
   async refresh() {
     try {
       const result = await this.subStore.load();
-      this.view.renderSubCategoriesTable(result.items);
+      this.view.renderSubCategoriesTable(result.items, this.categories);
       this.view.renderSubCategoriesPagination({
         page: this.subStore.page,
         totalPages: this.subStore.totalPages,
@@ -59,6 +60,17 @@ export class SubCategoriesController {
       console.error(err);
       Alerts.error("No se pudieron cargar las subcategorías");
     }
+  }
+
+  bindCategoryFilter() {
+    const select = $("#subcat-category-filter");
+    if (!select) return;
+
+    select.addEventListener("change", async () => {
+      const value = select.value;
+      this.subStore.setCategoryId(value ? Number(value) : null);
+      await this.refresh();
+    });
   }
 
   bindPagination() {

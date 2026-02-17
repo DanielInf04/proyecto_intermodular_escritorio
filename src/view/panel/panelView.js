@@ -190,7 +190,7 @@ export class PanelView {
     `;
   }
 
-  renderSubCategoriesTable(subcategories) {
+  renderSubCategoriesTable(subcategories, categories) {
     const tbody = document.querySelector('#pane-subcategories tbody');
 
     tbody.innerHTML = '';
@@ -209,14 +209,18 @@ export class PanelView {
     subcategories.forEach((sc, index) => {
       const tr = document.createElement('tr');
 
-      const categoriaNombre =
-        sc?.categoria?.nombre ??
-        sc?.categoriaNombre ??
-        (sc?.categoria?.id != null
-          ? `ID ${sc.categoria.id}`
-          : sc?.categoriaId != null
-          ? `ID ${sc.categoriaId}`
-          : '—');
+      const catId =
+        sc?.categoria_id ??
+        sc?.categoriaId ??
+        sc?.categoria?.id ??
+        sc?.categoria?.getId?.();
+
+      const category = categories.find((c) =>
+        c?.getId ? c.getId() === catId : c?.id === catId
+      );
+
+      const categoryName =
+        category?.getName ? category.getName() : (category?.nombre ?? category?.name ?? "—");
 
       const imagenUrl = sc?.imagenUrl ?? '';
 
@@ -236,7 +240,7 @@ export class PanelView {
           }
         </td>
         <td class="fw-bold">${sc.nombre ?? ''}</td>
-        <td>${categoriaNombre}</td>
+        <td>${categoryName}</td>
         <td class="text-end">
           <button
             class="btn btn-sm btn-soft"

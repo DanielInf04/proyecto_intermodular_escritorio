@@ -5,9 +5,13 @@ const subcategoriesService = {
     getByCategory: (categoryId) => 
         request(`/api/categories/${Number(categoryId)}/subcategories`),
 
-    list: async({ page = 0, size = 10, q = "" } = {}) => {
+    list: async({ page = 0, size = 10, q = "", cId = null } = {}) => {
         const params = new URLSearchParams({ page, size });
         if (q && q.trim()) params.set("q", q.trim());
+       
+        if (cId !== null && cId !== undefined && cId !== "") {
+            params.set("cId", String(cId));
+        }
 
         const { data, meta } = await requestWithMeta(`/api/subcategories?${params.toString()}`);
 
@@ -17,7 +21,8 @@ const subcategoriesService = {
             totalCount: meta.totalCount,
             page,
             size,
-            q
+            q,
+            cId
         };
     },
     getById: (id) => request(`/api/subcategories/${id}`),

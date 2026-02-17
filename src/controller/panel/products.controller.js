@@ -119,10 +119,14 @@ export class ProductsController {
         if (!input) return;
 
         const run = debounce(async () => {
+
+        this.prStore.setQuery(input.value || "");
+        this.prStore.setPage(0);
+
         // tu store debe tener setQuery. Si no lo tiene, te digo abajo cómo hacerlo.
-        this.prStore.setQuery?.(input.value || "");
+        //this.prStore.setQuery?.(input.value || "");
         // normalmente al buscar reseteas a página 0
-        this.prStore.setPage?.(0);
+        //this.prStore.setPage?.(0);
         await this.refresh();
         }, 300);
 
@@ -159,9 +163,14 @@ export class ProductsController {
             }
 
             // aquí aplicarías filtros al store
-            this.prStore.setCategoryId?.(categoryId);
-            this.prStore.setSubcategoryId?.(null);
-            this.prStore.setPage?.(0);
+
+            this.prStore.setCategoryId(categoryId);
+            this.prStore.setSubcategoryId(null);
+            this.prStore.setPage(0);
+
+            //this.prStore.setCategoryId?.(categoryId);
+            //this.prStore.setSubcategoryId?.(null);
+            //this.prStore.setPage?.(0);
             await this.refresh();
             });
         }
@@ -170,8 +179,11 @@ export class ProductsController {
             subSel.addEventListener("change", async () => {
             const subcategoryId = subSel.value ? Number(subSel.value) : null;
 
-            this.prStore.setSubcategoryId?.(subcategoryId);
-            this.prStore.setPage?.(0);
+            this.prStore.setSubcategoryId(subcategoryId);
+            this.prStore.setPage(0);
+
+            //this.prStore.setSubcategoryId?.(subcategoryId);
+            //this.prStore.setPage?.(0);
             await this.refresh();
             });
         }

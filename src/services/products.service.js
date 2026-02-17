@@ -1,9 +1,16 @@
 const { request, requestWithMeta } = require('./apiClient');
 
 const productsService = {
-    list: async({ page = 0, size = 10, q = "" } ={}) => {
+    list: async({ page = 0, size = 10, q = "", cId = null, scId = nullm, stock = null } ={}) => {
         const params = new URLSearchParams({ page, size });
-        if (q && q.trim()) params.set("q", q.trim());
+
+        const qq = typeof q === "string" ? q.trim() : "";
+        if (qq) params.set("q", qq);
+
+        if (cId != null && cId !== "") params.set("cId", String(cId));
+        if (scId != null && scId !== "") params.set("scId", String(scId));
+        
+        if (stock) params.set("stock", String(stock));
 
         const { data, meta } = await requestWithMeta(`/api/products?${params.toString()}`);
 
@@ -13,7 +20,10 @@ const productsService = {
             totalCount: meta.totalCount,
             page,
             size,
-            q
+            q, qq,
+            cId,
+            scId,
+            stock
         }
     },
     getById: (id) => request(`/api/products/${id}`),
