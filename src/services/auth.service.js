@@ -1,9 +1,9 @@
 const api = require('./apiClient');
 
-async function login(username, password) {
+async function login(email, password) {
     const data = await api.request('/auth/login', {
         method: 'POST',
-        body: { username, password }
+        body: { email, password }
     });
 
     if (data?.token) api.setToken(data.token);
