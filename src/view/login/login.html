@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+
+  <link href="./../../../css/bootstrap.css" rel="stylesheet">
+  <link href="login.css" rel="stylesheet">
+</head>
+
+<body>
+  <main class="auth-shell">
+    <!-- Fondo decorativo -->
+    <div class="bg-blobs" aria-hidden="true">
+      <span class="blob b1"></span>
+      <span class="blob b2"></span>
+      <span class="blob b3"></span>
+      <span class="grid"></span>
+    </div>
+
+    <section class="auth-card shadow-lg">
+      <header class="auth-header">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <!-- Icono simple en SVG -->
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M12 2v20" stroke="currentColor" stroke-width="1.7" opacity="0.5"/>
+              <path d="M4 6.5l8 4.5 8-4.5" stroke="currentColor" stroke-width="1.7" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <div class="brand-title">Tu App</div>
+            <div class="brand-subtitle">Inicia sesión para continuar</div>
+          </div>
+        </div>
+      </header>
+
+      <form id="loginForm" class="auth-form" autocomplete="on" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="email">Email</label>
+          <div class="input-wrap">
+            <span class="input-icon" aria-hidden="true">✉️</span>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="form-control form-control-lg"
+              placeholder="tu@correo.com"
+              value="laura@musiclab.com"
+              required
+            />
+          </div>
+          <div class="invalid-feedback">Introduce un email válido.</div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label" for="password">Contraseña</label>
+          <div class="input-wrap">
+            <span class="input-icon" aria-hidden="true">🔒</span>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="form-control form-control-lg"
+              placeholder="••••••••"
+              minlength="6"
+              value="1234"
+              required
+            />
+            <button type="button" class="btn btn-sm btn-ghost" id="togglePassword" aria-label="Mostrar contraseña">
+              Mostrar
+            </button>
+          </div>
+          <div class="invalid-feedback">Mínimo 6 caracteres.</div>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between mt-3 mb-3 gap-2 flex-wrap">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="rememberMe" checked>
+            <label class="form-check-label" for="rememberMe">
+              Recuérdame
+            </label>
+          </div>
+          <a class="link-soft" href="#" id="forgotLink">¿Olvidaste la contraseña?</a>
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100 btn-glow" type="submit" id="loginBtn">
+          <span class="btn-text">Entrar</span>
+          <span class="btn-spinner spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+
+        <!--<p class="small text-center mt-3 mb-0 text-muted">
+          ¿No tienes cuenta?
+          <a class="link-soft" href="#" id="signupLink">Crear una</a>
+        </p>-->
+
+        <div class="toast-area" id="toastArea" aria-live="polite" aria-atomic="true"></div>
+      </form>
+
+      <!--<footer class="auth-footer">
+        <span class="badge-soft">v1.0</span>
+        <span class="sep">•</span>
+        <span class="text-muted">Electron</span>
+      </footer>-->
+    </section>
+  </main>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

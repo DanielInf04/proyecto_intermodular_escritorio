@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel · Gestión</title>
+
+  <link href="./../../../css/bootstrap.css" rel="stylesheet">
+  <link href="panel.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M12 2v20" stroke="currentColor" stroke-width="1.7" opacity="0.5"/>
+            <path d="M4 6.5l8 4.5 8-4.5" stroke="currentColor" stroke-width="1.7" opacity="0.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">Tu App</div>
+          <div class="brand-subtitle">Panel de administración</div>
+        </div>
+      </div>
+
+      <div class="nav-section">Gestión</div>
+      <nav class="side-nav" id="sidebarCatalog">
+        <a href="#" class="active" data-open-tab="#pane-products">
+          📦 Productos
+          <span class="pill">CRUD</span>
+        </a>
+        <a href="#" data-open-tab="#pane-categories">
+          🏷️ Categorías
+          <span class="pill">CRUD</span>
+        </a>
+        <a href="#" data-open-tab="#pane-subcategories">
+          🧩 Subcategorías
+          <span class="pill">CRUD</span>
+        </a>
+      </nav>
+
+      <div class="nav-section">Otros</div>
+      <nav class="side-nav">
+        <a href="#">
+          🧺 Cestas
+          <span class="pill">demo</span>
+        </a>
+        <a href="#" data-view="users">
+          👤 Usuarios
+          <span class="pill">demo</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="badge-soft">v1.0</span>
+        <button id="btnLogout" class="btn btn-sm btn-soft" type="button">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="title mb-1">Gestión de catálogo</p>
+          <p class="subtitle">Administra productos, categorías y subcategorías</p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <span class="badge-soft">Usuario: admin@local</span>
+          <span class="badge-soft">Rol: ADMIN</span>
+        </div>
+      </header>
+
+      <section id="view-catalog" class="glass-card">
+        <!-- Tabs -->
+        <div class="tabs-wrap">
+          <ul class="nav nav-pills" id="catalogTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="tab-products" data-bs-toggle="pill" data-bs-target="#pane-products" type="button" role="tab">
+                Productos
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tab-categories" data-bs-toggle="pill" data-bs-target="#pane-categories" type="button" role="tab">
+                Categorías
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tab-subcategories" data-bs-toggle="pill" data-bs-target="#pane-subcategories" type="button" role="tab">
+                Subcategorías
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tab-content" id="catalogTabContent">
+          <!-- =========================
+               PANE: PRODUCTOS
+          ========================== -->
+          <div class="tab-pane fade show active" id="pane-products" role="tabpanel" aria-labelledby="tab-products">
+
+            <div class="filters">
+              <div class="left">
+                <input class="form-control" id="products-search" style="min-width:260px" type="search" placeholder="Buscar producto (nombre, marca...)" />
+                <select class="form-select" id="products-category-filter" style="min-width:190px">
+                  <option value="" selected>Filtrar por categoría</option>
+                </select>
+
+                <select class="form-select" id="products-subcategory-filter" style="min-width:210px" disabled>
+                  <option value="" selected>Filtrar por subcategoría</option>
+                </select>
+
+                <select class="form-select" id="products-stock-filter" style="min-width:140px">
+                  <option value="">Stock</option>
+                  <option value="in">Con stock</option>
+                  <option value="out">Sin stock</option>
+                  <option value="low">Bajo stock</option>
+                </select>
+              </div>
+
+              <div class="right">
+                <button class="btn btn-soft" type="button">Exportar</button>
+                <button class="btn btn-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalProductCreate">
+                  + Nuevo producto
+                </button>
+              </div>
+            </div>
+
+            <div class="card-header-soft">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge-soft">Total: 12</span>
+                <span class="muted">·</span>
+                <span class="muted">Última actualización: —</span>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-soft" type="button">Actualizar</button>
+                <button class="btn btn-sm btn-soft" type="button">Limpiar filtros</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th style="width:64px;">Imagen</th>
+                    <th>Nombre</th>
+                    <th style="width:120px;">Precio</th>
+                    <th style="width:110px;">Stock</th>
+                    <th style="width:170px;" class="text-end">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- filas demo -->
+                  <tr>
+                    <td>
+                      <div class="avatar" title="imagen_url">
+                        <img src="https://via.placeholder.com/60x60.png?text=IMG" alt="Imagen producto">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="fw-bold">Auriculares BT</div>
+                      <div class="muted small">id: 101</div>
+                    </td>
+                    <td>SoundX</td>
+                    <td>29.99 €</td>
+                    <td><span class="badge-soft">45</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-soft" data-bs-toggle="modal" data-bs-target="#modalProduct">Editar</button>
+                      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="avatar" title="imagen_url">📦</div>
+                    </td>
+                    <td>
+                      <div class="fw-bold">Cafetera</div>
+                      <div class="muted small">id: 102</div>
+                    </td>
+                    <td>BrewPro</td>
+                    <td>79.00 €</td>
+                    <td><span class="badge-soft">8</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-soft" data-bs-toggle="modal" data-bs-target="#modalProduct">Editar</button>
+                      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div class="avatar" title="imagen_url">🛍️</div>
+                    </td>
+                    <td>
+                      <div class="fw-bold">Camiseta básica</div>
+                      <div class="muted small">id: 103</div>
+                    </td>
+                    <td>Urban</td>
+                    <td>12.50 €</td>
+                    <td><span class="badge-soft">0</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-soft" data-bs-toggle="modal" data-bs-target="#modalProduct">Editar</button>
+                      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div id="products-pagination" class="d-flex align-items-center justify-content-between p-3">
+                <!-- Se rellena por JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- =========================
+               PANE: CATEGORÍAS
+          ========================== -->
+          <div class="tab-pane fade" id="pane-categories" role="tabpanel" aria-labelledby="tab-categories">
+
+            <div class="filters">
+              <div class="left">
+                <input class="form-control" style="min-width:260px" type="search" placeholder="Buscar categoría..." />
+              </div>
+              <div class="right">
+                <button id="btnNewCategory" class="btn btn-brand" data-bs-toggle="modal" data-bs-target="#modalCategoryCreate">
+                  Nueva categoría
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th style="width:110px;">ID</th>
+                    <th>Nombre</th>
+                    <th style="width:170px;" class="text-end">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge-soft">1</span></td>
+                    <td class="fw-bold">Electrónica</td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-soft" data-bs-toggle="modal" data-bs-target="#modalCategory">Editar</button>
+                      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-soft">2</span></td>
+                    <td class="fw-bold">Hogar</td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-soft" data-bs-toggle="modal" data-bs-target="#modalCategory">Editar</button>
+                      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <!-- =========================
+               PANE: SUBCATEGORÍAS
+          ========================== -->
+          <div class="tab-pane fade" id="pane-subcategories" role="tabpanel" aria-labelledby="tab-subcategories">
+
+            <div class="filters">
+              <div class="left">
+                <input id="subcat-search" class="form-control" style="min-width:260px" type="search" placeholder="Buscar subcategoría..." />
+                <select class="form-select" id="subcat-category-filter" style="min-width:220px">
+                  <option value="" selected>Filtrar por categoría</option>
+                </select>
+              </div>
+              <div class="right">
+                <button class="btn btn-brand" type="button" data-bs-toggle="modal" data-bs-target="#modalSubcategoryCreate">
+                  + Nueva subcategoría
+                </button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th style="width:110px;">Imagen</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th style="width:170px;" class="text-end">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge-soft">10</span></td>
+                    <td class="fw-bold">Móviles</td>
+                    <td>Electrónica</td>
+                    <td class="muted small">imagen_url…</td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-soft" data-bs-toggle="modal" data-bs-target="#modalSubcategory">Editar</button>
+                      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge-soft">11</span></td>
+                    <td class="fw-bold">Portátiles</td>
+                    <td>Electrónica</td>
+                    <td class="muted small">imagen_url…</td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-soft" data-bs-toggle="modal" data-bs-target="#modalSubcategory">Editar</button>
+                      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div
+                id="subcat-pagination"
+                class="d-flex justify-content-between align-items-center mt-3 ml-2"
+              ></div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section id="view-users" class="glass-card d-none">
+
+        <!-- Filtros -->
+        <div class="filters mb-3">
+          <div class="left d-flex flex-wrap gap-2">
+            <input
+              id="users-search"
+              class="form-control"
+              style="min-width:260px"
+              type="search"
+              placeholder="Buscar usuario (nombre o email)..."
+            />
+
+            <select class="form-select" style="min-width:180px">
+              <option selected>Filtrar por rol</option>
+              <option>ADMIN</option>
+              <option>USER</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th style="width:90px;">ID</th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th style="width:120px;">Rol</th>
+                <th style="width:140px;">Fecha Alta</th>
+              </tr>
+            </thead>
+
+            <tbody id="users-tbody">
+              <tr>
+                <td><span class="badge-soft">1</span></td>
+
+                <td>
+                  <div class="fw-bold">danig</div>
+                </td>
+
+                <td>danig@email.com</td>
+
+                <td>
+                  <span class="badge-soft">ADMIN</span>
+                </td>
+
+                <td class="muted small">2026-02-11</td>
+
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Paginación -->
+          <div
+            id="users-pagination"
+            class="d-flex justify-content-between align-items-center mt-3"
+          >
+            <div class="muted small">
+              Página <b>1</b> de <b>1</b>
+            </div>
+
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-secondary" disabled>
+                Anterior
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" disabled>
+                Siguiente
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =========================
+     MODAL: CREAR PRODUCTO
+========================== -->
+<div class="modal fade" id="modalProductCreate" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <form id="productCreateForm" class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Nuevo producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+  <div class="container-fluid">
+
+    <!-- Nombre -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <label class="form-label">Nombre</label>
+        <input class="form-control" type="text" name="nombre"
+               placeholder="Nombre del producto" required>
+      </div>
+    </div>
+
+    <!-- Marca | Categoría | Subcategoría -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">Marca</label>
+        <input class="form-control" type="text" name="marca"
+               placeholder="Marca" required>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Categoría</label>
+        <select class="form-select" name="categoria_id" id="productCategoryCreate" required>
+          <option value="" selected disabled>Selecciona…</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Subcategoría</label>
+        <select class="form-select" name="subcategoria_id" id="productSubcategoryCreate" required>
+          <option value="" selected disabled>Selecciona…</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Precio | Stock -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Precio</label>
+        <input class="form-control" type="number" step="0.01"
+               name="precio" placeholder="0.00" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Stock</label>
+        <input class="form-control" type="number"
+               name="stock" placeholder="0" min="0" required>
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" rows="3"
+                  name="descripcion"
+                  placeholder="Descripción del producto..."></textarea>
+      </div>
+    </div>
+
+    <!-- Imagen -->
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Imagen</label>
+
+        <input
+          type="file"
+          id="productImageInputCreate"
+          name="imagen"
+          accept="image/*"
+          class="d-none"
+        >
+
+        <div class="d-flex align-items-center gap-3">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            onclick="document.getElementById('productImageInputCreate').click()"
+          >
+            Seleccionar imagen
+          </button>
+
+          <span id="productImageNameCreate" class="text-muted">
+            Ninguna imagen seleccionada
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+      <div class="modal-footer">
+        <button class="btn btn-soft" type="button" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button class="btn btn-brand" type="submit">
+          Crear
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+<!-- =========================
+     MODAL: EDITAR PRODUCTO
+========================== -->
+<div class="modal fade" id="modalProductEdit" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <form id="productEditForm" class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Editar producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row g-3">
+
+          <!-- ID oculto -->
+          <input type="hidden" name="id">
+
+          <!-- Nombre -->
+          <div class="col-md-8">
+            <label class="form-label">Nombre</label>
+            <input class="form-control" type="text" name="nombre" required>
+          </div>
+
+          <!-- Marca -->
+          <div class="col-md-4">
+            <label class="form-label">Marca</label>
+            <input class="form-control" type="text" name="marca" required>
+          </div>
+
+          <!-- ✅ Categoría (FALTABA) -->
+          <div class="col-md-4">
+            <label class="form-label">Categoría</label>
+            <select
+              class="form-select"
+              name="categoria_id"
+              id="productCategoryEdit"
+              required
+            >
+              <option value="" selected disabled>Selecciona…</option>
+            </select>
+          </div>
+
+          <!-- ✅ Subcategoría (ya lo tenías, se queda) -->
+          <div class="col-md-4">
+            <label class="form-label d-block">Subcategoría</label>
+            <select
+              class="form-select w-100"
+              id="productSubcategoryEdit"
+              name="subcategoria_id"
+              required
+            >
+              <option value="" selected disabled>Selecciona…</option>
+            </select>
+          </div>
+
+          <!-- Precio -->
+          <div class="col-md-4">
+            <label class="form-label">Precio</label>
+            <input class="form-control" type="number" step="0.01" name="precio" required>
+          </div>
+
+          <!-- Stock -->
+          <div class="col-md-4">
+            <label class="form-label">Stock</label>
+            <input class="form-control" type="number" name="stock" min="0" required>
+          </div>
+
+          <!-- Descripción -->
+          <div class="col-12">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-control" rows="3" name="descripcion"></textarea>
+          </div>
+
+          <!-- Imagen (archivo) -->
+          <div class="col-12">
+            <label class="form-label">Cambiar imagen</label>
+
+            <input
+              type="file"
+              id="productImageInputEdit"
+              name="imagen"
+              accept="image/*"
+              class="d-none"
+            >
+
+            <div class="d-flex align-items-center gap-3">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                onclick="document.getElementById('productImageInputEdit').click()"
+              >
+                Seleccionar imagen
+              </button>
+
+              <span id="productImageNameEdit" style="margin-left:10px">Ninguna imagen seleccionada</span>
+            </div>
+
+            <div class="form-text text-light" style="opacity:.7">
+              Si no seleccionas una imagen nueva, se mantiene la actual.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-soft" type="button" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-brand" type="submit">Guardar cambios</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+  <!-- =========================
+       MODAL: CATEGORÍA
+  ========================== -->
+  <div class="modal fade" id="modalCategoryCreate" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <form id="categoryCreateForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Nueva categoría</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <label class="form-label">Nombre</label>
+          <input
+            class="form-control"
+            type="text"
+            name="nombre"
+            placeholder="Nombre de la categoría"
+            required
+          >
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-soft" type="button" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button class="btn btn-brand" type="submit">
+            Crear
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalCategoryEdit" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <form id="categoryEditForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar categoría</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <label class="form-label">Nombre</label>
+          <input
+            class="form-control"
+            type="text"
+            name="nombre"
+            placeholder="Nombre de la categoría"
+            required
+          >
+          <input type="hidden" name="id">
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-soft" type="button" data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button class="btn btn-brand" type="submit">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- =========================
+       MODAL: SUBCATEGORÍA (CREATE)
+  ========================== -->
+  <div class="modal fade" id="modalSubcategoryCreate" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <form id="subcategoryCreateForm" class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Nueva subcategoría</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row g-3">
+
+          <!-- Nombre -->
+          <div class="col-12">
+            <label class="form-label">Nombre</label>
+            <input
+              class="form-control"
+              type="text"
+              name="nombre"
+              placeholder="Nombre de la subcategoría"
+              required
+            >
+          </div>
+
+          <!-- Categoría -->
+          <div class="col-12">
+            <label class="form-label d-block" for="categoria_id">Categoría</label>
+            <select id="subcategoryCategoryCreate" class="form-select w-100" name="categoria_id" required>
+              <option value="" selected disabled>Selecciona…</option>
+              <option value="1">Electrónica</option>
+              <option value="2">Hogar</option>
+              <option value="3">Moda</option>
+            </select>
+          </div>
+
+          <!-- Imagen -->
+          <div class="col-12">
+            <label class="form-label">Imagen</label>
+
+            <!-- Input file oculto -->
+            <input
+              type="file"
+              id="imagenInputCreate"
+              name="imagen"
+              accept="image/*"
+              class="d-none"
+            >
+
+            <div class="d-flex align-items-center gap-4">
+              <button type="button" class="btn btn-outline-secondary" id="btnImagenCreate"
+                onclick="document.getElementById('imagenInput').click()">
+                Seleccionar imagen
+              </button>
+
+              <span style="margin-left:10px" id="imageNameCreate">
+                Ninguna imagen seleccionada
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button class="btn btn-primary" type="submit">
+          Crear
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- =========================
+     MODAL: SUBCATEGORÍA (EDIT) - estilo CREATE
+========================== -->
+<div class="modal fade" id="modalSubcategoryEdit" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <form id="subcategoryEditForm" class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Editar subcategoría</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row g-3">
+
+          <!-- Nombre -->
+          <div class="col-12">
+            <label class="form-label">Nombre</label>
+            <input
+              class="form-control"
+              type="text"
+              name="nombre"
+              placeholder="Nombre de la subcategoría"
+              required
+            >
+          </div>
+
+          <!-- Categoría -->
+          <div class="col-12">
+            <label class="form-label d-block" for="categoria_id_edit">Categoría</label>
+            <select id="subcategoryCategoryEdit" class="form-select w-100" name="categoria_id" required>
+              <option value="" selected disabled>Selecciona…</option>
+              <!-- Opciones se cargan igual que en create (server o JS) -->
+              <option value="1">Electrónica</option>
+              <option value="2">Hogar</option>
+              <option value="3">Moda</option>
+            </select>
+          </div>
+
+          <!-- Imagen -->
+          <div class="col-12">
+            <label class="form-label">Imagen</label>
+
+            <!-- Input file oculto -->
+            <input
+              type="file"
+              id="imagenInputEdit"
+              name="imagen"
+              accept="image/*"
+              class="d-none"
+            >
+
+            <div class="d-flex align-items-center gap-4">
+              <button type="button" class="btn btn-outline-secondary" id="btnImagenEdit"
+                onclick="document.getElementById('imagenInputEdit').click()">
+                Seleccionar imagen
+              </button>
+
+              <span style="margin-left:10px" id="imageNameEdit">
+                Ninguna imagen seleccionada
+              </span>
+            </div>
+
+          </div>
+
+          <!-- ID de la subcategoría -->
+          <input type="hidden" name="id">
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button class="btn btn-primary" type="submit">
+          Guardar
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+  <!-- Bootstrap JS (necesario para tabs/modals) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script type="module" src="renderer.js"></script>
+</body>
+</html>
