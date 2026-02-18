@@ -11,6 +11,14 @@ export class PanelView {
     wireSidebarViews();
   }
 
+  renderUser(user) {
+    const emailEl = document.getElementById("userEmail");
+    const roleEl = document.getElementById("userRole");
+
+    if (emailEl) emailEl.textContent = `Usuario: ${user.sub}`;
+    if (roleEl) roleEl.textContent = `Rol: ${user.role}`;
+  }
+
   // =========================
   // CATEGORIES (Render)
   // =========================

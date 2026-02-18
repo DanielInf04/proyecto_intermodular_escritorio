@@ -1,29 +1,51 @@
-//const BASE_URL = process.env.BASE_URL || "https://dummyjson.com";
 const BASE_URL = process.env.BASE_URL || "http://localhost:8080";
+const TOKEN_KEY = "auth_token";
 
-let token = null;
+let storePromise = null;
 
-function setToken(newToken) {
-    token = newToken
+async function getStore() {
+  if (!storePromise) {
+    storePromise = import("electron-store").then((mod) => new mod.default());
+  }
+  return storePromise;
+}
+
+async function setToken(newToken) {
+  const store = await getStore();
+  if (newToken) store.set(TOKEN_KEY, newToken);
+  else store.delete(TOKEN_KEY);
+}
+
+async function getToken() {
+  const store = await getStore();
+  return store.get(TOKEN_KEY, null);
 }
 
 function isFormData(body) {
   return !!body && typeof body.append === "function" && typeof body.get === "function";
 }
 
+function isPublicAuthPath(path) {
+  return (
+    path.startsWith("/auth/login") ||
+    path.startsWith("/auth/register")
+  );
+}
+
 async function request(path, { method = "GET", body, headers = {} } = {}) {
   const multipart = isFormData(body);
+  const t = await getToken();
 
   const finalHeaders = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(!isPublicAuthPath(path) && t ? { Authorization: `Bearer ${t}` } : {}),
     ...headers,
   };
 
-  console.log("[apiClient]", method, path, "hasToken:", !!token, "isMultipart:", multipart);
+  console.log("[apiClient]", method, path, "hasToken:", !!t, "isMultipart:", multipart);
   console.log("[apiClient] Authorization:", finalHeaders.Authorization);
 
   if (method === "POST" && path.startsWith("/api/categories")) {
-    console.log("[apiClient] POST categories token?", !!token);
+    console.log("[apiClient] POST categories token?", !!t);
     console.log("[apiClient] headers:", finalHeaders);
   }
 
@@ -64,9 +86,10 @@ async function request(path, { method = "GET", body, headers = {} } = {}) {
 
 async function requestWithMeta(path, { method = "GET", body, headers = {} } = {}) {
   const multipart = isFormData(body);
+  const t = await getToken();
 
   const finalHeaders = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(!isPublicAuthPath(path) && t ? { Authorization: `Bearer ${t}` } : {}),
     ...headers,
   };
 
@@ -103,62 +126,9 @@ async function requestWithMeta(path, { method = "GET", body, headers = {} } = {}
   return { data, meta: { totalCount, totalPages } };
 }
 
-/*async function request(path, { method = 'GET', body, headers = {} } = {}) {
-    console.log('LOGIN URL:', `${BASE_URL}/auth/login`);
-    const res = await fetch(`${BASE_URL}${path}`, {
-        method,
-        headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            ...headers,
-        },
-        body: body ? JSON.stringify(body) : undefined
-    });
-
-    const contentType = res.headers.get('content-type') || '';
-    const isJson = contentType.includes('application/json');
-    const data = isJson ? await res.json() : await res.text();
-
-    if (!res.ok) {
-        const msg = isJson && data?.message ? data.message : `HTTP ${res.status}`;
-        const err = new Error(msg);
-        err.status = res.status;
-        err.data = data;
-        throw err;
-    }
-
-    return data;
+async function clearToken() {
+  const store = await getStore();
+  store.delete(TOKEN_KEY);
 }
-async function requestWithMeta(path, { method = 'GET', body, headers = {} } = {}) {
-    
-    const res = await fetch(`${BASE_URL}${path}`, {
-        method,
-        headers: {
-            'Content-Type': 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            ...headers,
-        },
-        body: body ? JSON.stringify(body) : undefined
-    });
 
-    const contentType = res.headers.get('content-type') || '';
-    const isJson = contentType.includes('application/json');
-    const data = isJson ? await res.json() : await res.text();
-
-    if (!res.ok) {
-        const msg = isJson && data?.message ? data.message : `HTTP ${res.status}`;
-        const err = new Error(msg);
-        err.status = res.status;
-        err.data = data;
-        throw err;
-    }
-
-    // OJO: en fetch los headers no distinguen mayúsculas/minúsculas
-    const totalCount = Number(res.headers.get('x-total-count') ?? 0);
-    const totalPages = Number(res.headers.get('x-total-pages') ?? 0);
-
-    return { data, meta: { totalCount, totalPages } };
-}*/
-
-
-module.exports = { request, requestWithMeta, setToken };
+module.exports = { request, requestWithMeta, setToken, getToken, clearToken };

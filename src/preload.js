@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('api', {
 
     getToken: () =>
       ipcRenderer.invoke('auth:getToken'),
+    getCurrentUser: () => ipcRenderer.invoke("auth:getCurrentUser"),
   },
   ui: {
     openPanel: () => ipcRenderer.invoke('ui:openPanel'),

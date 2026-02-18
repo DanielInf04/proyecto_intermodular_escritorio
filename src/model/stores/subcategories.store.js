@@ -18,7 +18,7 @@ export class SubCategoriesStore {
       q: this.query,
       cId: this.categoryId
     });
-    console.log("nuevo subcategories.store: ", result);
+    //console.log("nuevo subcategories.store: ", result);
 
     this.items = result.items;
     this.totalPages = result.totalPages;

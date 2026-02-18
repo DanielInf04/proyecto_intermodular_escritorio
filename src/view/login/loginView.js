@@ -1,59 +1,94 @@
 export class LoginView {
+  constructor() {
+    this.form = null;
+    this.emailInput = null;
+    this.passwordInput = null;
+    this.loginBtn = null;
+    this.togglePasswordBtn = null;
+    this.rememberMe = null;
 
-    constructor() {
-        this.form = null;
-        this.emailInput = null;
-        this.passwordInput = null;
-        this.loginBtn = null;
+    // callbacks (inyectados por el controller)
+    this.onSubmitHandler = null;
+    this.onTogglePasswordHandler = null;
+  }
+
+  init() {
+    this.form = document.getElementById("loginForm");
+    this.emailInput = document.getElementById("email");
+    this.passwordInput = document.getElementById("password");
+    this.loginBtn = document.getElementById("loginBtn");
+    this.togglePasswordBtn = document.getElementById("togglePassword");
+    this.rememberMe = document.getElementById("rememberMe");
+
+    if (!this.form) {
+      console.error("LoginView: no se encontró #loginForm");
+      return;
     }
 
-    init() {
-        this.form = document.getElementById('loginForm');
-        this.emailInput = document.getElementById('email');
-        this.passwordInput = document.getElementById('password');
-        this.loginBtn = document.getElementById('loginBtn');
+    // Eventos -> delegados al controller (si están asignados)
+    this.form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.onSubmitHandler?.(e);
+    });
 
-        if (!this.form) {
-            console.error('LoginView: no se encontró #loginForm');
-            return;
-        }
-
-        this.form.addEventListener('submit', this.onSubmit.bind(this));
-    }
-
-    async onSubmit(e) {
+    if (this.togglePasswordBtn) {
+      this.togglePasswordBtn.addEventListener("click", (e) => {
         e.preventDefault();
-
-        const email = this.emailInput.value.trim();
-        const password = this.passwordInput.value;
-
-        if (!email || !password) {
-        console.warn('Email o password vacíos');
-        return;
-        }
-
-        this.setLoading(true);
-
-        try {
-            const result = await window.api.auth.login(email, password);
-            console.log('LOGIN OK:', result);
-
-            // abrimos el panel de administración
-            await window.api.ui.openPanel();
-            window.close();
-        } catch (err) {
-            console.error('LOGIN ERROR:', err.message || err);
-            // aquí luego pintas un toast o mensaje
-        } finally {
-            this.setLoading(false);
-        }
+        this.onTogglePasswordHandler?.(e);
+      });
     }
+  }
 
-    setLoading(loading) {
-        if (!this.loginBtn) return;
-        this.loginBtn.disabled = loading;
-        this.loginBtn.classList.toggle('loading', loading);
+  // ====== Métodos de UI ======
+
+  getEmail() {
+    return this.emailInput?.value.trim() ?? "";
+  }
+
+  setEmail(value) {
+    if (this.emailInput) this.emailInput.value = value ?? "";
+  }
+
+  getPassword() {
+    return this.passwordInput?.value ?? "";
+  }
+
+  isRememberMeChecked() {
+    return this.rememberMe?.checked === true;
+  }
+
+  setRememberMeChecked(value) {
+    if (this.rememberMe) this.rememberMe.checked = !!value;
+  }
+
+  setPasswordVisible(visible) {
+    if (!this.passwordInput) return;
+
+    this.passwordInput.type = visible ? "text" : "password";
+
+    if (this.togglePasswordBtn) {
+      this.togglePasswordBtn.textContent = visible ? "Ocultar" : "Mostrar";
+      this.togglePasswordBtn.setAttribute(
+        "aria-label",
+        visible ? "Ocultar contraseña" : "Mostrar contraseña"
+      );
     }
+  }
 
+  isPasswordVisible() {
+    return this.passwordInput?.type === "text";
+  }
 
+  setLoading(loading) {
+    if (!this.loginBtn) return;
+    this.loginBtn.disabled = loading;
+    this.loginBtn.classList.toggle("loading", loading);
+  }
+
+  showError(err) {
+    // Mantén simple; si luego quieres toast, lo cambias aquí
+    console.error("LOGIN ERROR:", err?.message || err);
+    console.error("STATUS:", err?.status);
+    console.error("DATA:", err?.data);
+  }
 }

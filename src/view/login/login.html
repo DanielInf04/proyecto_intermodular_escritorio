@@ -24,15 +24,10 @@
       <header class="auth-header">
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">
-            <!-- Icono simple en SVG -->
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2l8 4.5v11L12 22 4 17.5v-11L12 2z" stroke="currentColor" stroke-width="1.7"/>
-              <path d="M12 2v20" stroke="currentColor" stroke-width="1.7" opacity="0.5"/>
-              <path d="M4 6.5l8 4.5 8-4.5" stroke="currentColor" stroke-width="1.7" opacity="0.5"/>
-            </svg>
+            <img src="./../img/MusicLab.png" alt="Icono" width="45" height="45">
           </div>
           <div class="brand-text">
-            <div class="brand-title">Tu App</div>
+            <div class="brand-title">MusicLab</div>
             <div class="brand-subtitle">Inicia sesión para continuar</div>
           </div>
         </div>
@@ -48,8 +43,8 @@
               name="email"
               type="email"
               class="form-control form-control-lg"
-              placeholder="tu@correo.com"
-              value="laura@musiclab.com"
+              placeholder="Introduce tu correo"
+              value=""
               required
             />
           </div>
@@ -65,9 +60,9 @@
               name="password"
               type="password"
               class="form-control form-control-lg"
-              placeholder="••••••••"
+              placeholder="Introduce tu contraseña"
               minlength="6"
-              value="1234"
+              value=""
               required
             />
             <button type="button" class="btn btn-sm btn-ghost" id="togglePassword" aria-label="Mostrar contraseña">
@@ -92,22 +87,12 @@
           <span class="btn-spinner spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         </button>
 
-        <!--<p class="small text-center mt-3 mb-0 text-muted">
-          ¿No tienes cuenta?
-          <a class="link-soft" href="#" id="signupLink">Crear una</a>
-        </p>-->
-
         <div class="toast-area" id="toastArea" aria-live="polite" aria-atomic="true"></div>
       </form>
-
-      <!--<footer class="auth-footer">
-        <span class="badge-soft">v1.0</span>
-        <span class="sep">•</span>
-        <span class="text-muted">Electron</span>
-      </footer>-->
     </section>
   </main>
 
-  <script type="module" src="main.js"></script>
+  <!--<script type="module" src="main.js"></script>-->
+  <script type="module" src="renderer.js"></script>
 </body>
 </html>

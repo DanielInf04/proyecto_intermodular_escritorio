@@ -145,7 +145,7 @@ export class SubCategoriesController {
     try {
       const result = await this.subStore.load();
       this.view.renderSubCategoriesTable(result.items, this.categories);
-      console.log("subcategoriesController", this.categories)
+      //console.log("subcategoriesController", this.categories)
       this.view.renderSubCategoriesPagination({
         page: this.subStore.page,
         totalPages: this.subStore.totalPages,
