@@ -1,5 +1,5 @@
 //import { PanelView } from './panelView.js';
-import { PanelView } from './panelView2.js';
+import { PanelView } from './panelView.js';
 import { PanelController } from '../../controller/panel/panel.controller.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
