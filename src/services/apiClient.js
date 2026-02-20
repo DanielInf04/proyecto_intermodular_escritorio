@@ -21,6 +21,11 @@ async function getToken() {
   return store.get(TOKEN_KEY, null);
 }
 
+async function clearToken() {
+  const store = await getStore();
+  store.delete(TOKEN_KEY);
+}
+
 function isFormData(body) {
   return !!body && typeof body.append === "function" && typeof body.get === "function";
 }
@@ -57,7 +62,6 @@ async function request(path, { method = "GET", body, headers = {} } = {}) {
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
     headers: finalHeaders,
-    // ✅ NO stringify si es FormData
     body: body
       ? (multipart ? body : (typeof body === "string" ? body : JSON.stringify(body)))
       : undefined,
@@ -124,11 +128,6 @@ async function requestWithMeta(path, { method = "GET", body, headers = {} } = {}
   const totalPages = Number(res.headers.get("x-total-pages") ?? 0);
 
   return { data, meta: { totalCount, totalPages } };
-}
-
-async function clearToken() {
-  const store = await getStore();
-  store.delete(TOKEN_KEY);
 }
 
 module.exports = { request, requestWithMeta, setToken, getToken, clearToken };
